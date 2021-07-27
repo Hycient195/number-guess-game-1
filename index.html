@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number guess game</title>
+    <style>
+        body{
+            background: linear-gradient(90deg, cyan, yellow);
+        }
+        .container{
+            text-align: center;
+            margin: 0 auto;
+        }
+        .cover{
+            border-radius: 10px;
+            width: 550px;
+            /* border: 1px solid royalblue; */
+            padding: 20px 50px 50px 50px;
+            background: linear-gradient(-35deg, cyan,yellow)
+            /* background: linear-gradient(red, blue); */
+        }
+        .btn{
+            background: sienna;
+            font-family:cursive;
+            color:yellow;
+            font-size: 17px;
+            height: 42px;
+            padding: 5px;
+            border-radius: 0px 10px 10px 0px;
+            border: 1px solid sienna;
+            border-left: none;
+        }
+        .btn:focus{
+            outline: none;
+        }
+       
+        .input{
+            /* background: rgb(202, 240, 187); */
+            background: lightyellow;
+            font-family:cursive;
+            font-size: 17px;
+            height: 30px;
+            padding: 5px;
+            border-radius: 10px 0px 0px 10px;
+            border: 1px solid orangered;
+            border-right: none;
+        }
+        .input:focus{
+            outline: none;
+        }
+
+        .description-text{
+            /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
+            font-family:monospace;
+            font-weight: 540;
+            font-size: 17px;
+        }
+        .guesses{
+            font-family:'Courier New', Courier, monospace;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .guess-range{
+            font-family:'Courier New', Courier, monospace;
+            font-size: 20px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container cover">
+        <p class="description-text">
+            This is a guess game, to begin, guess a number
+            between 1 to 100, and the game will tell you if your guess
+            is above or below the mystery number. The game ends after 10 trials,
+            or once you guess the mystery number correctly. Have fun!!! 
+        </p>
+        <hr>
+        <input type="number" class="input" placeholder="input your guess">
+        <button class="btn">Submit</button>
+        <p class="guesses">Your guesses:  </p>
+        <p class="guess-range">Guess range</p>
+    </div>
+    
+    
+</body>
+<script>
+    
+    let input = document.querySelector('input')
+    let button = document.querySelector('button')
+    let guessRange = document.querySelector('.guess-range')
+    let guesses = document.querySelector('.guesses')
+
+    let random = Math.floor( Math.random() * 100) + 1
+    let guessCount = 0
+    reset = () =>{
+        random = Math.floor( Math.random() * 100) + 1
+        guessCount = 0
+    }
+    
+    button.addEventListener('click', ()=>{
+        
+        if(guessCount < 10){
+            if(input.value == ''){
+                guessRange.style.color = 'red'
+                guessRange.textContent = 'input is empty'
+                setTimeout(()=>{
+                    guessRange.style.color = 'black'
+                    guessRange.textContent = 'Guess range: ' 
+                    input.value = ''               
+                }, 2000)
+            }else if(input.value > 100 || input.value < 0){
+                guessRange.style.color = 'red'
+                guessRange.textContent = 'input is out of the range of values'
+                setTimeout(()=>{
+                    guessRange.style.color = 'black'
+                    guessRange.textContent = 'Guess range: ' 
+                    input.value = ''               
+                }, 2000)
+            }
+            else if(input.value == random){
+                guessRange.textContent = 'Hurray, you guessed the mystery number correctly. Game is restarted, make new guesses again.. 😁'
+                guessRange.style.color = 'green'
+                guesses.textContent = 'Your guesses: '
+                input.value = ''
+                reset()
+            }else if(input.value < random){
+                guessRange.textContent = 'Last guess is less than mystery number'
+                guessRange.style.color = 'red'
+                guesses.append( input.value + " ") 
+                input.value = ''
+                guessCount++
+            }else if(input.value > random){ 
+                guessRange.textContent = 'Last guess is greater than mystery number'
+                guessRange.style.color = 'red'
+                guesses.append(input.value + " ") 
+                input.value = ''
+                guessCount++
+            }
+        }else{
+            guessRange.textContent = `Out of trials, the mystery number is ${random}`
+            guesses.textContent = 'Your guesses: '
+            input.value = ''
+            reset()
+        }
+
+        
+        
+        /****** Uncomment for debugging purposes only ******/
+        // console.log('Mystery number is ' + random)
+        // console.log('Guess count: ' + guessCount)
+    })
+    
+    
+
+</script>
+</html>
